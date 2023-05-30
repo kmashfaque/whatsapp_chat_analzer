@@ -57,12 +57,15 @@ if uploaded_file is not None:
 
             with col2:
                 st.dataframe(new_df)
-
+        st.title("Word Cloud")
         df_wc=hellper.create_word_cloud(selected_user,df)
         fig,ax=plt.subplots()
         ax.imshow(df_wc)
         st.pyplot(fig)
 
+
+        most_common_words=hellper.most_common_words(selected_user,df)
+        st.dataframe(most_common_words)
 
 
 
