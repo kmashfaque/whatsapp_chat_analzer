@@ -1,6 +1,7 @@
 import streamlit as st
 import preprocessor
 import hellper
+import matplotlib.pyplot as plt
 
 
 st.sidebar.title("Whatsapp chat analyzer")
@@ -25,7 +26,7 @@ if uploaded_file is not None:
 
         col1,col2,col3,col4=st.columns(4)
 
-        num_messages,num_words,num_of_media_messages=hellper.fetch_stats(selected_user,df)
+        num_messages,num_words,num_of_media_messages, num_links=hellper.fetch_stats(selected_user,df)
 
         with col1:
             st.header("Total messages")
@@ -37,4 +38,32 @@ if uploaded_file is not None:
         with col3:
             st.header("Number of media shared")
             st.title(num_of_media_messages)
+
+        with col4:
+            st.header("Number of total links")
+            st.title(num_links)
+
+        if selected_user=="Overall":
+            st.title("Most busy users")
+            x,new_df=hellper.most_busy_users(df)
+            fig,ax=plt.subplots()
+
+            col1,col2=st.columns(2)
+
+            with col1:
+                ax.bar(x.index, x.values,color="red")
+                plt.xticks(rotation="vertical")
+                st.pyplot(fig)
+
+            with col2:
+                st.dataframe(new_df)
+
+        df_wc=hellper.create_word_cloud(selected_user,df)
+        fig,ax=plt.subplots()
+        ax.imshow(df_wc)
+        st.pyplot(fig)
+
+
+
+
 
